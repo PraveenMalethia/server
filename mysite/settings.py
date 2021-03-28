@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+    'corsheaders',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -60,13 +61,14 @@ OLD_PASSWORD_FIELD_ENABLED = True
 
 LOGOUT_ON_PASSWORD_CHANGE = False
 
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ORIGIN_WHITELIST = (
+    'http://localhost:3000',
+)
 
 JWT_AUTH_COOKIE = 'user'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        #'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
         'rest_framework.authentication.TokenAuthentication',
     ),
 }
@@ -76,6 +78,7 @@ REST_FRAMEWORK = {
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
