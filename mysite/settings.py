@@ -46,11 +46,12 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'dj_rest_auth',
+    'store',
 ]
 
 # additional config
 
-#REST_USE_JWT = True
+REST_USE_JWT = True
 ACCOUNT_LOGOUT_ON_GET = True
 
 JWT_AUTH_COOKIE = 'user'
@@ -69,7 +70,8 @@ JWT_AUTH_COOKIE = 'user'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.TokenAuthentication',
+        #'rest_framework.authentication.TokenAuthentication',
+        'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
     ),
 }
 
