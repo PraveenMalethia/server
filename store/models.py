@@ -1,6 +1,11 @@
 from django.db import models
 
+from django.contrib.auth.models import User
+
+
 # Create your models here.
+
+
 class Category(models.Model):
     name = models.CharField(unique=True,max_length=255)
     image = models.ImageField(upload_to="category/images",blank=True,null=True)
@@ -48,7 +53,7 @@ class Product(models.Model):
     )
     color = models.CharField(max_length=20, blank=True, null=True)
     in_stock = models.BooleanField(default=True)
-    description = RichTextField()
+    description = models.TextField(max_length=1000)
     featured_image = models.ImageField(upload_to="product/images")
     image1 = models.ImageField(upload_to="product/images")
     image2 = models.ImageField(upload_to="product/images")
