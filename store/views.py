@@ -24,6 +24,15 @@ def index(request):
     return Response(serializer.data)
 
 @api_view(['GET'])
+def productView(request,uuid):
+    try:
+        product = Product.objects.get(id=uuid)
+        serializer = ProductSerializer(product,many=False)
+        return Response(serializer.data)
+    except:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+@api_view(['GET'])
 def Brands(request):
     brands = Brand.objects.all()
     serializer = BrandSerializer(brands,many=True)
