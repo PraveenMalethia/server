@@ -159,3 +159,5 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 CORS_ALLOW_ALL_ORIGINS = True
+
+django_heroku.settings(locals())
