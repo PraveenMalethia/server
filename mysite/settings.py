@@ -160,7 +160,7 @@ STATIC_URL = '/static/'
 
 MEDIA_URL = '/media/'
 
-MEDIA_ROOT = Path.joinpath(BASE_DIR, 'media_root')
+MEDIA_ROOT = Path.joinpath(BASE_DIR, 'media')
 CORS_ALLOW_ALL_ORIGINS = True
 
 django_heroku.settings(locals())
