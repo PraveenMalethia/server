@@ -7,7 +7,8 @@ from rest_framework.views import APIView
 
 # rest framework function based view mixing 
 from .serializers import (ProductSerializer,
-    BrandSerializer
+    BrandSerializer,
+    CategorySerializer
     )
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
@@ -26,4 +27,10 @@ def index(request):
 def Brands(request):
     brands = Brand.objects.all()
     serializer = BrandSerializer(brands,many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def Categories(request):
+    categories = Category.objects.all()
+    serializer = CategorySerializer(categories,many=True)
     return Response(serializer.data)
