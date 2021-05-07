@@ -45,7 +45,7 @@ class Brand(models.Model):
 class Product(models.Model):
     id = models.UUIDField(default=uuid.uuid4,  unique=True, primary_key=True, editable=False)
     name = models.CharField(max_length=200)
-    brand = models.ForeignKey(Brand,on_delete=models.CASCADE)
+    brand = models.ForeignKey(Brand,on_delete=models.SET_NULL,null=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     category = models.ForeignKey(Category,on_delete=models.CASCADE)
     size = models.CharField(max_length=10)
