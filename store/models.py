@@ -9,7 +9,7 @@ from django.contrib.auth.models import User
 class Category(models.Model):
     id = models.UUIDField(default=uuid.uuid4,  unique=True, primary_key=True, editable=False)
     name = models.CharField(unique=True,max_length=255)
-    image = models.ImageField(upload_to="category/images",blank=True,null=True)
+    image = models.ImageField(upload_to="media/category/images",blank=True,null=True)
     class Meta:
         ordering = ["name"]
         verbose_name_plural = "Categories"
@@ -27,7 +27,7 @@ class Category(models.Model):
 class Brand(models.Model):
     id = models.UUIDField(default=uuid.uuid4,  unique=True, primary_key=True, editable=False)
     name = models.CharField(unique=True,max_length=255)
-    logo = models.ImageField(upload_to="brands/logo",null=True,blank=True)
+    logo = models.ImageField(upload_to="media/brands/logo",null=True,blank=True)
 
     class Meta:
         ordering = ["name"]
