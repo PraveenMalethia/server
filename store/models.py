@@ -1,5 +1,5 @@
 from django.db import models
-
+import uuid
 from django.contrib.auth.models import User
 
 
@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 
 
 class Category(models.Model):
+    id = models.UUIDField(default=uuid.uuid4,  unique=True, primary_key=True, editable=False)
     name = models.CharField(unique=True,max_length=255)
     image = models.ImageField(upload_to="category/images",blank=True,null=True)
     class Meta:
@@ -24,6 +25,7 @@ class Category(models.Model):
         return url
 
 class Brand(models.Model):
+    id = models.UUIDField(default=uuid.uuid4,  unique=True, primary_key=True, editable=False)
     name = models.CharField(unique=True,max_length=255)
     logo = models.ImageField(upload_to="brands/logo",null=True,blank=True)
 
@@ -41,8 +43,8 @@ class Brand(models.Model):
         return url
 
 class Product(models.Model):
+    id = models.UUIDField(default=uuid.uuid4,  unique=True, primary_key=True, editable=False)
     name = models.CharField(max_length=200)
-    slug = models.SlugField(unique=True, null=False)
     brand = models.ForeignKey(Brand,on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     category = models.ForeignKey(Category,on_delete=models.CASCADE)
@@ -115,6 +117,7 @@ class Product(models.Model):
 
 
 class Order(models.Model):
+    id = models.UUIDField(default=uuid.uuid4,  unique=True, primary_key=True, editable=False)
     customer = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     date_orderd = models.DateTimeField(auto_now=True)
     transaction_id = models.CharField(max_length=200, null=True, blank=True)
@@ -176,6 +179,7 @@ class VillageOrCity(models.Model):
         return self.name
 
 class ShippingAddress(models.Model):
+    id = models.UUIDField(default=uuid.uuid4,  unique=True, primary_key=True, editable=False)
     customer = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     order = models.ForeignKey(Order, on_delete=models.SET_NULL, null=True, blank=True)
     address = models.CharField(max_length=100)
