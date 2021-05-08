@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from rest_framework.views import APIView
 
 # rest framework function based view mixing 
-from .serializers import (ProductSerializer,BrandSerializer,CategorySerializer)
+from .serializers import (ProductSerializer,BrandSerializer,CategorySerializer,OrderItemSerializer)
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework import permissions, status
@@ -35,6 +35,7 @@ def productView(request,uuid):
 @api_view(['POST'])
 def addToCart(request,uuid):
     try:
+        # user = request.user
         user = User.objects.get(username='admin')
         product = Product.objects.get(id=uuid)
         order , created = Order.objects.get_or_create(customer=user,placed=False)
@@ -52,6 +53,28 @@ def addToCart(request,uuid):
         print(e)
         return Response(status=status.HTTP_404_NOT_FOUND)
 
+@api_view(['POST'])
+def removeFromCart(request,uuid):
+    try:
+        # user = request.user
+        user = User.objects.get(username='admin')
+        product = Product.objects.get(id=uuid)
+        order = Order.objects.get(customer=user,placed=False)
+        try:
+            orderItem = OrderItem.objects.get(product=product, order=order)
+            if orderItem.quantity == 1:
+                orderItem.delete()
+            else:
+                orderItem.quantity -= 1
+                orderItem.save()
+        except OrderItem.DoesNotExist:
+            pass
+        serializer = ProductSerializer(product,many=False)
+        return Response(serializer.data)
+    except Exception as e:
+        print(e)
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
 @api_view(['GET'])
 def Brands(request):
     brands = Brand.objects.all()
@@ -62,4 +85,13 @@ def Brands(request):
 def Categories(request):
     categories = Category.objects.all()
     serializer = CategorySerializer(categories,many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def Cart(request):
+    # user = request.user
+    user = User.objects.get(username='admin')
+    order = Order.objects.get(customer=user,placed=False)
+    orderItems = order.orderItems
+    serializer = OrderItemSerializer(orderItems,many=True)
     return Response(serializer.data)
