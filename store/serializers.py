@@ -17,12 +17,8 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class OrderItemSerializer(serializers.ModelSerializer):
-    order_product = serializers.SerializerMethodField(read_only=True)
-
+    product = ProductSerializer(read_only=True)
+    date_added = serializers.ReadOnlyField(source='FORMAT')
     class Meta:
         model = OrderItem
-        fields = ['quantity','order_product']
-
-    def get_order_product(self, product):
-        serializer = ProductSerializer(product, many=False)
-        return serializer.data
+        fields = ['id','quantity','product','date_added']
