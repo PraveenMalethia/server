@@ -26,7 +26,6 @@ def productView(request,uuid):
         recommendation = Product.objects.filter(category=product.category.id).annotate(sales_count=Count('sales')).exclude(id=product.id).order_by('sales_count')
         serializer = ProductSerializer(product,many=False)
         RSerializers = ProductSerializer(recommendation,many=True)
-        print(RSerializers.data)
         return Response({'product':serializer.data,'recommendations':RSerializers.data})
     except Exception as e:
         print(e)
