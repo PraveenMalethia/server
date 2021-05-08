@@ -56,6 +56,7 @@ class Product(models.Model):
     color = models.CharField(max_length=20, blank=True, null=True)
     in_stock = models.BooleanField(default=True)
     description = models.TextField(max_length=1000)
+    sales = models.BigIntegerField(default=0)
     featured_image = models.ImageField(upload_to="product/images")
     image1 = models.ImageField(upload_to="product/images")
     image2 = models.ImageField(upload_to="product/images")
