@@ -1,6 +1,7 @@
 from django.shortcuts import render
-from .models import Product , Brand , Category
+from .models import Product , Brand , Category , Order , OrderItem
 from django.db.models import Q , Count
+from django.contrib.auth.models import User
 # rest framework class based view mixing 
 from rest_framework.views import APIView
 
@@ -27,6 +28,26 @@ def productView(request,uuid):
         serializer = ProductSerializer(product,many=False)
         RSerializers = ProductSerializer(recommendation,many=True)
         return Response({'product':serializer.data,'recommendations':RSerializers.data})
+    except Exception as e:
+        print(e)
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+@api_view(['POST'])
+def addToCart(request,uuid):
+    try:
+        user = User.objects.get(username='admin')
+        product = Product.objects.get(id=uuid)
+        order , created = Order.objects.get_or_create(customer=user,placed=False)
+        try:
+            orderItem = OrderItem.objects.get(product=product, order=order)
+            if orderItem is not None:
+                orderItem.quantity += 1
+                orderItem.save()
+        except OrderItem.DoesNotExist:
+            orderItem = OrderItem.objects.create(product=product, order=order, quantity=1)
+            orderItem.save()
+        serializer = ProductSerializer(product,many=False)
+        return Response(serializer.data)
     except Exception as e:
         print(e)
         return Response(status=status.HTTP_404_NOT_FOUND)
