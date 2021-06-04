@@ -1,20 +1,23 @@
-from django.shortcuts import render
 from .models import Product , Brand , Category , Order , OrderItem
 from django.db.models import Q , Count
 from django.contrib.auth.models import User
-# rest framework class based view mixing 
-from rest_framework.views import APIView
+
 
 # rest framework function based view mixing 
-from .serializers import (ProductSerializer,BrandSerializer,CategorySerializer,OrderItemSerializer)
+from .serializers import (
+    ProductSerializer,
+    BrandSerializer,
+    CategorySerializer,
+    OrderItemSerializer,
+    ShippingAddressSerializer)
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
-from rest_framework import permissions, status
+from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.parsers import FileUploadParser
 # Create your views here.
 
 @api_view(['GET'])
+@permission_classes((IsAuthenticated,))
 def index(request):
     products = Product.objects.all()
     serializer = ProductSerializer(products,many=True)
@@ -33,6 +36,7 @@ def productView(request,uuid):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['POST'])
+@permission_classes((IsAuthenticated,))
 def addToCart(request,uuid):
     try:
         # user = request.user
@@ -54,6 +58,7 @@ def addToCart(request,uuid):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['POST'])
+@permission_classes((IsAuthenticated,))
 def removeFromCart(request,uuid):
     try:
         # user = request.user
@@ -95,3 +100,15 @@ def Cart(request):
     orderItems = order.orderItems
     serializer = OrderItemSerializer(orderItems,many=True)
     return Response(serializer.data)
+
+@api_view(['GET'])
+def Checkout(request):
+    # user = request.user
+    user = User.objects.get(username='admin')
+    order = Order.objects.get(customer=user,placed=False)
+    serializer = ShippingAddressSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+    else:
+        print(serializer.errors)
+    return Response(serializer.data,status=status.HTTP_200_OK)
