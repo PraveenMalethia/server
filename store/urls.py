@@ -9,4 +9,5 @@ urlpatterns = [
   path('brands/',views.Brands,name='brands'),
   path('categories/',views.Categories,name='categories'),
   path('cart/',views.Cart,name='cart'),
+  path('order/',views.OrderDetails,name='order'),
 ]

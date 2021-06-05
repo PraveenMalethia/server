@@ -133,22 +133,7 @@ class Order(models.Model):
         ordering = ["-date_orderd"]
 
     def __str__(self):
-        return f"Order ID : {self.id}"
-
-    @property
-    def get_cart_total(self):
-        orderitems = self.orderitem_set.all()
-        total = sum([item.get_total for item in orderitems])
-        return total
-
-    @property
-    def get_cart_items(self):
-        return self.orderitem_set.count()
-
-    @property
-    def orderItems(self):
-        orderitems = self.orderitem_set.all()
-        return orderitems
+        return f"Order number : {self.id}"
 
 
 class OrderItem(models.Model):

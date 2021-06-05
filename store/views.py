@@ -9,7 +9,8 @@ from .serializers import (
     BrandSerializer,
     CategorySerializer,
     OrderItemSerializer,
-    ShippingAddressSerializer)
+    ShippingAddressSerializer,
+    OrderSerializer)
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework import status
@@ -39,8 +40,7 @@ def productView(request,uuid):
 @permission_classes((IsAuthenticated,))
 def addToCart(request,uuid):
     try:
-        # user = request.user
-        user = User.objects.get(username='admin')
+        user = request.user
         product = Product.objects.get(id=uuid)
         order , created = Order.objects.get_or_create(customer=user,placed=False)
         try:
@@ -61,8 +61,7 @@ def addToCart(request,uuid):
 @permission_classes((IsAuthenticated,))
 def removeFromCart(request,uuid):
     try:
-        # user = request.user
-        user = User.objects.get(username='admin')
+        user = request.user
         product = Product.objects.get(id=uuid)
         order = Order.objects.get(customer=user,placed=False)
         try:
@@ -93,18 +92,18 @@ def Categories(request):
     return Response(serializer.data)
 
 @api_view(['GET'])
+@permission_classes((IsAuthenticated,))
 def Cart(request):
-    # user = request.user
-    user = User.objects.get(username='admin')
+    user = request.user
     order = Order.objects.get(customer=user,placed=False)
     orderItems = order.orderItems
     serializer = OrderItemSerializer(orderItems,many=True)
     return Response(serializer.data)
 
 @api_view(['GET'])
+@permission_classes((IsAuthenticated,))
 def Checkout(request):
-    # user = request.user
-    user = User.objects.get(username='admin')
+    user = request.user
     order = Order.objects.get(customer=user,placed=False)
     serializer = ShippingAddressSerializer(data=request.data)
     if serializer.is_valid():
@@ -112,3 +111,11 @@ def Checkout(request):
     else:
         print(serializer.errors)
     return Response(serializer.data,status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+@permission_classes((IsAuthenticated,))
+def OrderDetails(request):
+    user = request.user
+    order = Order.objects.get(customer=user,placed=False)
+    serializer = OrderSerializer(order,many=False)
+    return Response(serializer.data)

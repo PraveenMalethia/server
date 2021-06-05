@@ -75,6 +75,12 @@ REST_FRAMEWORK = {
     ),
 }
 
+
+REST_AUTH_SERIALIZERS = {
+    'USER_DETAILS_SERIALIZER':'store.serializers.CustomUserDetailsSerializer'
+}
+
+
 # end here
 
 MIDDLEWARE = [
