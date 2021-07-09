@@ -96,7 +96,7 @@ def Categories(request):
 def Cart(request):
     user = request.user
     order = Order.objects.get(customer=user,placed=False)
-    orderItems = order.orderItems
+    orderItems = order.orderitem_set.all()
     serializer = OrderItemSerializer(orderItems,many=True)
     return Response(serializer.data)
 
