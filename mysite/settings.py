@@ -62,9 +62,13 @@ OLD_PASSWORD_FIELD_ENABLED = True
 
 LOGOUT_ON_PASSWORD_CHANGE = False
 
-CORS_ORIGIN_WHITELIST = (
-    'http://localhost:3000',
-)
+# CORS_ORIGIN_WHITELIST = (
+#     'http://localhost:3000',
+# )
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+CORS_ALLOW_ALL_ORIGINS = True
 
 JWT_AUTH_COOKIE = 'user'
 
