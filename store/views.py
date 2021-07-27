@@ -100,6 +100,7 @@ def Cart(request):
     serializer = OrderItemSerializer(orderItems,many=True)
     return Response(serializer.data)
 
+
 @api_view(['GET'])
 @permission_classes((IsAuthenticated,))
 def Checkout(request):
