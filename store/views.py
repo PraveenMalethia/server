@@ -38,7 +38,8 @@ def productView(request,uuid):
 
 @api_view(['POST'])
 @permission_classes((IsAuthenticated,))
-def addToCart(request,uuid):
+def addToCart(request):
+    uuid = request.data.get('product_id')
     try:
         user = request.user
         product = Product.objects.get(id=uuid)
@@ -52,7 +53,7 @@ def addToCart(request,uuid):
             orderItem = OrderItem.objects.create(product=product, order=order, quantity=1)
             orderItem.save()
         serializer = ProductSerializer(product,many=False)
-        return Response(serializer.data)
+        return Response({ 'message' : 'Product added to Cart', 'data' :serializer.data})
     except Exception as e:
         print(e)
         return Response(status=status.HTTP_404_NOT_FOUND)
